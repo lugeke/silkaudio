@@ -1,10 +1,8 @@
-from flask_migrate import Migrate
 from silkaudio import create_app, db
 from silkaudio.models import Audiobook, User, History
 import os, click, json
 from datetime import datetime
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
-migrate = Migrate(app, db)
 
 
 @app.cli.command()
