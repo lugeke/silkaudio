@@ -17,7 +17,6 @@ class Config:
     SILKAUDIO_MAIL_SENDER = 'Silkaudio Admin <flasky@example.com>'
     SILKAUDIO_ADMIN = os.environ.get('SILKAUDIO_ADMIN')
 
-    AUDIOBOOKS_PATH = '/Users/lugeke/Desktop/audiobook'
     AUDIOBOOKS_PER_PAGE = 5
 
     @staticmethod
@@ -29,6 +28,7 @@ class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
         'postgresql://postgres:psql@localhost/data-dev'
+    print(SQLALCHEMY_DATABASE_URI)
 
 
 class TestingConfig(Config):
