@@ -61,6 +61,9 @@ def generateSoftLnk():
     for ab in Audiobook.query.all():
         sourceFile = os.path.join(audioPath, ab.title)
         targetFile = os.path.join(audioPath, str(ab.id))
+        # centos needed
+        sourceFile = os.path.normpath(sourceFile)
+        targetFile = os.path.normpath(targetFile)
         if os.path.exists(targetFile):
             print('target file {} exist'.format(targetFile))
             continue
