@@ -1,6 +1,6 @@
 from silkaudio import create_app, db
 from silkaudio.models import Audiobook, User, History
-import os, click, json, subprocess
+import os, click, json, subprocess, shlex
 from datetime import datetime
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 
@@ -62,15 +62,15 @@ def generateSoftLnk():
         sourceFile = os.path.join(audioPath, ab.title)
         targetFile = os.path.join(audioPath, str(ab.id))
         # centos needed
-        sourceFile = os.path.normpath(sourceFile)
-        targetFile = os.path.normpath(targetFile)
+        # sourceFile = sourceFile.replace('', '\\ ')
+        # targetFile = targetFile.replace(' ', '\\\\\\ ')
         if os.path.exists(targetFile):
             print('target file {} exist'.format(targetFile))
             continue
         elif not os.path.exists(sourceFile):
             print('source file {} not exist'.format(sourceFile))
             continue
-        elif subprocess.call(['ln', '-s', sourceFile, targetFile]) != 0:
+        elif subprocess.call(['ln', '-s', '{}'.format(sourceFile), targetFile]) != 0:
             print('create link error {} {}'.format(ab.id, ab.title))
         else:
             print('create link success {} {}'.format(ab.id, ab.title))
