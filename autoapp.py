@@ -2,8 +2,23 @@ from silkaudio import create_app, db
 from silkaudio.models import Audiobook, User, History
 import os, click, json, subprocess, shlex
 from datetime import datetime
-app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+from flask import url_for
+from flask.json import JSONEncoder
 
+class MyJSONEncoder(JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, Audiobook):
+            return {
+            'id': obj.id,
+            'url': url_for('api.get_audiobooks', id=obj.id, _external=True),
+            'title': obj.title,
+            'author': obj.author,
+            'description': obj.description,
+            'chapter': obj.chapter
+        }
+        return super().default(obj)
+app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+app.json_encoder = MyJSONEncoder
 
 @app.cli.command()
 def create_all():

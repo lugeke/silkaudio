@@ -15,13 +15,33 @@ def get_audiobooks():
     next = None
     if pagination.has_next:
         next = url_for('api.get_audiobooks', page=page+1, _external=True)
-    return jsonify({
-        'audiobooks': [ab.toJSON() for ab in audiobooks],
-        'prev': prev,
-        'next': next,
-        'count': pagination.total
-    })
+    # return jsonify({
+    #     'audiobooks': [ab.toJSON() for ab in audiobooks],
+    #     'prev': prev,
+    #     'next': next,
+    #     'count': pagination.total
+    # })
+    return jsonify([{
+            'audiobook': ab,
+            'progress': {
+                "recentChapter": ab.chapter[0],
+                "all": {
+                    ab.chapter[0]: 0
+                }
+            },
+            "recentListen": 0
+} for ab in audiobooks])
 
+
+
+#  "progress": {
+#             "recentChapter": "05 - Ch01 - The Habit Loop; How Habits Work - Part 03",
+#             "all": {
+#                 "11 - Ch02 - The Craving Brain; How To Create New Habits - Part 05": 45,
+#                 "05 - Ch01 - The Habit Loop; How Habits Work - Part 03": 90
+#             }
+#         },
+#         "recentListen": 1515386324335
 
 @api.route('/audiobooks/<int:id>')
 def get_audiobook(id):

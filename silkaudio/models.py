@@ -14,16 +14,16 @@ class Audiobook(db.Model):
         return '<Audiobook id:{} title:{}>'.format(self.id, self.title)
 
 
-    def toJSON(self):
-        jsonPost = {
-            'id': self.id,
-            'url': url_for('api.get_audiobooks', id=self.id, _external=True),
-            'title': self.title,
-            'author': self.author,
-            'description': self.description,
-            'chapter': self.chapter
-        }
-        return jsonPost
+    # def toJSON(self):
+    #     jsonPost = {
+    #         'id': self.id,
+    #         'url': url_for('api.get_audiobooks', id=self.id, _external=True),
+    #         'title': self.title,
+    #         'author': self.author,
+    #         'description': self.description,
+    #         'chapter': self.chapter
+    #     }
+    #     return jsonPost
 
     @staticmethod
     def fromJSON(json):
