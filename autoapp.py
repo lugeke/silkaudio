@@ -74,11 +74,8 @@ def generateSoftLnk():
     audioPath = os.environ.get('AUDIO_PATH') or r'/Users/lugeke/Desktop/audiobook'
 
     for ab in Audiobook.query.all():
-        sourceFile = os.path.join(audioPath, ab.title)
+        sourceFile = os.path.join(audioPath, ab.title.replace(' ', '_'))
         targetFile = os.path.join(audioPath, str(ab.id))
-        # centos needed
-        # sourceFile = sourceFile.replace('', '\\ ')
-        # targetFile = targetFile.replace(' ', '\\\\\\ ')
         if os.path.exists(targetFile):
             print('target file {} exist'.format(targetFile))
             continue
