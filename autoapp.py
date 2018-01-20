@@ -10,7 +10,7 @@ class MyJSONEncoder(JSONEncoder):
         if isinstance(obj, Audiobook):
             return {
             'id': obj.id,
-            'url': url_for('api.get_audiobooks', id=obj.id, _external=True),
+            'url': url_for('api.get_audiobook', id=obj.id, _external=True),
             'title': obj.title,
             'author': obj.author,
             'description': obj.description,
@@ -44,25 +44,19 @@ def add_audiobook(host, no_debugger):
     audioPath = os.environ.get('AUDIO_PATH') or r'/Users/lugeke/Desktop/audiobook'
 
     dirs = [f for f in os.listdir(audioPath) if os.path.isdir(os.path.join(audioPath, f))]
-
-    with open(os.path.join(audioPath, 'processInfo.json'), 'r+') as fpi:
-        pi = json.load(fpi)
-        try:
-            for d in dirs:
-                if d in pi: continue
-                d = os.path.join(audioPath, d)
-                with open(os.path.join(d, 'book.json')) as f:
-                    j = json.load(f)
-                with open(os.path.join(d, 'chps.json')) as f:
-                    c = json.load(f)
-                j['chapter'] = c
-                ab = Audiobook.fromJSON(j)
-                db.session.add(ab)
-                db.session.commit()
-                pi[ab.title] = ab.id
-        except Exception as e:
-            print(e)
-        json.dump(pi, fpi)
+    try:
+        for d in dirs:
+            d = os.path.join(audioPath, d)
+            with open(os.path.join(d, 'book.json')) as f:
+                j = json.load(f)
+            # with open(os.path.join(d, 'chps.json')) as f:
+            #     c = json.load(f)
+            # j['chapter'] = c
+            ab = Audiobook.fromJSON(j)
+            db.session.add(ab)
+            db.session.commit()
+    except Exception as e:
+        print(e)
 
 
 @app.cli.command()
