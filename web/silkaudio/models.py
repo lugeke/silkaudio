@@ -8,7 +8,7 @@ class Audiobook(db.Model):
     title = db.Column(db.String(128), nullable=False)
     author = db.Column(db.JSON, nullable=False)
     description = db.Column(db.Text, nullable=False)
-    chapter = db.Column(db.JSON, nullable=False)
+    chapter = db.Column(db.JSON, nullable=True)
 
     def __repr__(self):
         return '<Audiobook id:{} title:{}>'.format(self.id, self.title)

@@ -41,7 +41,7 @@ def clear_table():
 @click.option('--no-debugger', help='the id of audiobook')
 def add_audiobook(host, no_debugger):
     click.echo('add audiobook')
-    audioPath = os.environ.get('AUDIO_PATH') or r'/Users/lugeke/Desktop/audiobook'
+    audioPath = os.environ.get('AUDIO_PATH') or r'/Users/lugeke/Desktop/audiobook/to'
 
     dirs = [f for f in os.listdir(audioPath) if os.path.isdir(os.path.join(audioPath, f))]
     try:
@@ -51,7 +51,7 @@ def add_audiobook(host, no_debugger):
                 j = json.load(f)
             # with open(os.path.join(d, 'chps.json')) as f:
             #     c = json.load(f)
-            # j['chapter'] = c
+            j['chapter'] = []
             ab = Audiobook.fromJSON(j)
             db.session.add(ab)
             db.session.commit()

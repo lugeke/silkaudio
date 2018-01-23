@@ -26,21 +26,20 @@ class Config:
 
 class DevelopmentConfig(Config):
     DEBUG = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
-        'postgresql://postgres:psql@localhost/data-dev'
-    print(SQLALCHEMY_DATABASE_URI)
+    # SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
+    #     'postgresql://postgres:psql@localhost/data-dev'
+    # print(SQLALCHEMY_DATABASE_URI)
 
 
 class TestingConfig(Config):
     TESTING = True
-    SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or \
-        'postgresql://postgres:psql@localhost/data-test'
-    WTF_CSRF_ENABLED = False
+    # SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or \
+    #     'postgresql://postgres:psql@localhost/data-test'
 
 
 class ProductionConfig(Config):
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        'postgresql://postgres:psql@localhost/data'
+    # SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
+    #     'postgresql://postgres:psql@localhost/data'
 
     @classmethod
     def init_app(cls, app):
