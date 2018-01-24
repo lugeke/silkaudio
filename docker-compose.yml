@@ -1,8 +1,8 @@
-version: '2'
+version: '3'
 
 services:
   nginx:
-    restart: always
+    # restart: always
     build: ./nginx
     ports:
       - "80:80"
@@ -10,30 +10,43 @@ services:
     volumes:
       - /data/www/build:/data/www/build
       - /data/www/audio:/data/www/audio
-    links:
-      - web:web
+    # networks: 
+    #   - webnet
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    depends_on:
+      - web
 
   web:
-    restart: always
+    # restart: always
     build: ./web
     expose:
       - "8000"
-    volumes:
-      - /usr/src/app
     command: /usr/local/bin/gunicorn -w 2 -b :8000 autoapp:app
-    links:
-      - postgres:postgres
+    # networks: 
+    #   - webnet
     depends_on:
       - "postgres"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
 
   postgres:
     restart: always
     build: ./postgresql
     volumes:
-      - postgres-data:/var/lib/postgres/data
+      - db-data:/var/lib/postgres/data
     expose:
       - "5432"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
 
 volumes:
-  postgres-data:
-    driver: local
+  db-data:
+
+# networks: 
+#   webnet:

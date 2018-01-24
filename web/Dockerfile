@@ -1,24 +1,18 @@
 FROM python:3.6.1
 
+# Set the working directory to /app
+WORKDIR /app
 
-# Create the group and user to be used in this container
-RUN groupadd flaskgroup && useradd -m -g flaskgroup -s /bin/bash flask
+# Copy the current directory contents into the container at /app
+ADD . /app
 
-# Create the working directory (and set it as the working directory)
-RUN mkdir -p /home/flask/app/silkaudio
-WORKDIR /home/flask/app/silkaudio
+# Install any needed packages specified in requirements.txt
+RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
-# Install the package dependencies (this step is separated
-# from copying all the source code to avoid having to
-# re-install all python packages defined in requirements.txt
-# whenever any source code change is made)
-COPY requirements.txt /home/flask/app/silkaudio
-RUN pip install --no-cache-dir -r requirements.txt
+# Make port 80 available to the world outside this container
+EXPOSE 8000
 
-# Copy the source code into the container
-COPY . /home/flask/app/silkaudio
-
-RUN chown -R flask:flaskgroup /home/flask
+# Define environment variable
 ENV FLASK_APP=autoapp.py FLASK_DEBUG=1
 
-USER flask
+CMD "/usr/local/bin/gunicorn -w 2 -b :8000 autoapp:app"
