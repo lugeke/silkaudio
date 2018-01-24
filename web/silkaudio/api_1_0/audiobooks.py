@@ -29,7 +29,7 @@ def get_audiobooks():
 @api.route('/audiobook/<int:id>')
 def get_audiobook(id):
     ab = Audiobook.query.get_or_404(id)
-    return jsonify(ab.toJSON())
+    return jsonify(ab)
 
 
 @api.route('/audiobook', methods=['GET', 'POST'])
