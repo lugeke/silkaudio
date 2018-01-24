@@ -1,7 +1,10 @@
 from . import db
-from flask import url_for
 from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from flask import current_app
+
+
 class Audiobook(db.Model):
     __tablename__ = 'audiobook'
     id = db.Column(db.Integer, primary_key=True)
@@ -13,26 +16,13 @@ class Audiobook(db.Model):
     def __repr__(self):
         return '<Audiobook id:{} title:{}>'.format(self.id, self.title)
 
-
-    # def toJSON(self):
-    #     jsonPost = {
-    #         'id': self.id,
-    #         'url': url_for('api.get_audiobooks', id=self.id, _external=True),
-    #         'title': self.title,
-    #         'author': self.author,
-    #         'description': self.description,
-    #         'chapter': self.chapter
-    #     }
-    #     return jsonPost
-
     @staticmethod
     def fromJSON(json):
         return Audiobook(
-        title=json['title'], 
-        author=json['author'], 
-        description=json['description'],
-        chapter= json['chapter'])
-
+            title=json['title'],
+            author=json['author'],
+            description=json['description'],
+            chapter=json['chapter'])
 
 
 class User(db.Model):
@@ -44,7 +34,6 @@ class User(db.Model):
     confirmed = db.Column(db.Boolean, default=False)
     memberSince = db.Column(db.DateTime, default=datetime.utcnow)
     histories = db.relationship('History', backref='user', lazy='dynamic')
-
 
     @property
     def password(self):
@@ -77,7 +66,7 @@ class User(db.Model):
         s = Serializer(current_app.config['SECRET_KEY'])
         try:
             data = s.loads(token)
-        except:
+        except Exception:
             return None
         return User.query.get(data['id'])
 
@@ -88,13 +77,15 @@ class User(db.Model):
 class History(db.Model):
     __tablename__ = 'history'
     userId = db.Column(db.Integer, db.ForeignKey('user.id'),
-                        primary_key=True)
+                       primary_key=True)
     audiobookId = db.Column(db.Integer, db.ForeignKey('audiobook.id'),
-                             primary_key=True)
+                            primary_key=True)
     chapterHistory = db.Column(db.JSON, nullable=False)
     recentListen = db.Column(db.DateTime, default=datetime.utcnow)
+
     def __repr__(self):
-        return '<History userId:{} audiobookId:{}>'.format(self.userId, self.audiobookId)
+        return '<History userId:{} audiobookId:{}>'.format(
+            self.userId, self.audiobookId)
 
     def toJSON(self):
         jsonPost = {
@@ -103,5 +94,3 @@ class History(db.Model):
             'chapterHistory': self.chapterHistory
         }
         return jsonPost
-
-    

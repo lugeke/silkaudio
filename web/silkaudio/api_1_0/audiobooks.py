@@ -2,11 +2,14 @@ from flask import jsonify, request, current_app, url_for
 from . import api
 from ..models import Audiobook, User
 from silkaudio import db
+
+
 @api.route('/audiobooks/')
-def get_audiobooks():    
+def get_audiobooks():
     page = request.args.get('page', 1, type=int)
     pagination = Audiobook.query.order_by(Audiobook.title.desc()).paginate(
-        page, per_page=current_app.config['AUDIOBOOKS_PER_PAGE'], error_out=False
+        page, per_page=current_app.config['AUDIOBOOKS_PER_PAGE'],
+        error_out=False
     )
     audiobooks = pagination.items
     prev = None
@@ -21,7 +24,6 @@ def get_audiobooks():
         'next': next,
         'count': pagination.total
     })
-    
 
 
 @api.route('/audiobook/<int:id>')
@@ -29,34 +31,38 @@ def get_audiobook(id):
     ab = Audiobook.query.get_or_404(id)
     return jsonify(ab.toJSON())
 
+
 @api.route('/audiobook', methods=['GET', 'POST'])
 def audiobook():
     if request.method == 'POST':
         book = request.get_json()
+        # modify
         if 'id' in book:
             ab = Audiobook.query.get_or_404(book['id'])
-            if book['title']:
+            if 'title' in book:
                 ab.title = book['title']
-            if book['description']:
+            if 'description' in book:
                 ab.description = book['description']
-            if book['author']:
+            if 'author' in book:
                 ab.author = book['author']
             db.session.add(ab)
             db.session.commit()
             return jsonify({'success': True})
+        # add
         else:
             if 'chapter' not in book:
                 book['chapter'] = []
+            if not ('title' in book and 'author' in book and
+                    'description' in book):
+                return jsonify({'success': False, 'message':
+                                'title,author,description can\'t be empty'})
             ab = Audiobook.fromJSON(book)
             db.session.add(ab)
             db.session.commit()
             return jsonify({
-            'success': True,
-            'id': ab.id
-        })
-        
-
-
+              'success': True,
+              'id': ab.id
+            })
 
 
 @api.route('/audiobooks/search/')
@@ -65,16 +71,3 @@ def search_audiobooks():
     author = request.args.get('author')
     return '123'
 
-# @api.route('/audiobooks/<int:id>/')
-# def get_audiobook_res(id):
-#     if filepath.endswith('.mp3'):
-#         return send_file(os.path.join('/Users/lugeke/Desktop/silkaudio/audiobook', filepath))
-#     fm3u8 = os.path.join('/Users/lugeke/Desktop/silkaudio/audiobook', filepath, 'prog_index.m3u8')
-#     print(filepath)
-#     print(fm3u8)
-#     if os.path.exists(fm3u8):
-#         return send_file(fm3u8, mimetype = 'application/x-mpegURL')
-#     else:
-#         abort(404)
-
-    
