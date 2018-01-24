@@ -1,6 +1,6 @@
 from flask import jsonify, request, current_app, url_for
 from . import api
-from ..models import User
+from ..models import User, History
 
 
 @api.route('/users/<int:id>')
@@ -21,8 +21,7 @@ def get_user(id):
 def get_user_histories(id):
     user = User.query.get_or_404(id)
     page = request.args.get('page', 1, type=int)
-    pagination = user.histories.order_by(histories.last_listen.desc())
-    .paginate(
+    pagination = user.histories.order_by(History.last_listen.desc()).paginate(
             page, per_page=current_app.config['AUDIOBOOKS_PER_PAGE'],
             error_out=False
         )

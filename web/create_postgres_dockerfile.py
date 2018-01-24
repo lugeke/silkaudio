@@ -12,11 +12,11 @@ if not os.path.isdir(destination_dir):
     os.makedirs(destination_dir)
 
 # Create the 'Dockerfile' for initializing the Postgres Docker image
-with open(os.path.join(destination_dir, docker_file), 'w') as postgres_dockerfile:
-    postgres_dockerfile.write('FROM postgres:10.1-alpine')
-    postgres_dockerfile.write('\n')
-    postgres_dockerfile.write('\n# Set environment variables')
-    postgres_dockerfile.write('\nENV POSTGRES_USER {}'.format(app.config['POSTGRES_USER']))
-    postgres_dockerfile.write('\nENV POSTGRES_PASSWORD {}'.format(app.config['POSTGRES_PASSWORD']))
-    postgres_dockerfile.write('\nENV POSTGRES_DB {}'.format(app.config['POSTGRES_DB']))
-    postgres_dockerfile.write('\n')
+with open(os.path.join(destination_dir, docker_file), 'w') as f:
+    f.write('FROM postgres:10.1-alpine')
+    f.write('\n')
+    f.write('\n# Set environment variables')
+    f.write('\nENV POSTGRES_USER {}'.format(app.config['POSTGRES_USER']))
+    f.write('\nENV POSTGRES_PASSWORD {}'.format(app.config['POSTGRES_PASSWORD']))
+    f.write('\nENV POSTGRES_DB {}'.format(app.config['POSTGRES_DB']))
+    f.write('\n')
