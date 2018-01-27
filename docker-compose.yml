@@ -24,7 +24,7 @@ services:
     build: ./web
     expose:
       - "8000"
-    command: /usr/local/bin/gunicorn -w 2 -b :8000 autoapp:app
+    command: gunicorn -w 2 -b :8000 --chdir ./silkaudio  silkaudio.wsgi
     # networks: 
     #   - webnet
     depends_on:
@@ -38,15 +38,15 @@ services:
     restart: always
     build: ./postgresql
     volumes:
-      - db-data:/var/lib/postgres/data
-    expose:
-      - "5432"
+      - ./postgres/data:/var/lib/postgres/data
+    ports:
+      - "5432:5432"
     deploy:
       placement:
         constraints: [node.role == manager]
 
-volumes:
-  db-data:
+# volumes:
+#   db-data:
 
 # networks: 
 #   webnet:
