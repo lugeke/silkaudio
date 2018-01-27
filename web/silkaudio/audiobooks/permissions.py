@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from rest_framework.parsers import JSONParser
+
 
 class HasReadOrStaffPermission(permissions.BasePermission):
     def has_read_or_staff_permission(self, request):
