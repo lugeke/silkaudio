@@ -126,9 +126,6 @@ STATIC_URL = '/static/'
 STATIC_ROOT = '/data/www/build/static'
 AUTH_USER_MODEL = 'audiobooks.User'
 
-STATICFILES_DIRS = [
-    '/data/www/build/static',
-]
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
