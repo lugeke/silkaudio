@@ -20,7 +20,8 @@ class AuthorViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (permissions.IsAdminUser,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
+                          IsOwnerOrReadOnly,)
 
 
 class HistoryViewSet(viewsets.ModelViewSet):
@@ -28,3 +29,4 @@ class HistoryViewSet(viewsets.ModelViewSet):
     serializer_class = HistorySerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,)
+
