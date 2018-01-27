@@ -30,5 +30,8 @@ class History(models.Model):
     progress = models.FloatField(default=0)
     recentListen = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        unique_together = ('user', 'audiobook')
+
     def __str__(self):
         return '{ab.user} {ab.audiobook} {ab.progress}s'.format(ab=self)
