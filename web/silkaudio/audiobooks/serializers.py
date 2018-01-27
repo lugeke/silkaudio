@@ -17,7 +17,7 @@ class AuthorSerializer(serializers.ModelSerializer):
 class HistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = History
-        fields = ('user', 'audiobook', 'progress', 'recentListen')
+        fields = ('id', 'user', 'audiobook', 'progress', 'recentListen')
 
 
 class UserSerializer(serializers.ModelSerializer):
