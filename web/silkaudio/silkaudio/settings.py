@@ -80,7 +80,7 @@ DATABASES = {
         'NAME': 'data',
         'USER': 'postgres',
         'PASSWORD': 'psql',
-        'HOST': '127.0.0.1',
+        'HOST': 'postgres',
         'PORT': '5432',
     }
 }
@@ -123,8 +123,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
-
+STATIC_ROOT = '/data/www/build/static'
 AUTH_USER_MODEL = 'audiobooks.User'
+
+STATICFILES_DIRS = [
+    '/data/www/build/static',
+]
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
