@@ -28,7 +28,7 @@ class History(models.Model):
     user = models.ForeignKey('User', on_delete=models.CASCADE,)
     audiobook = models.ForeignKey('Audiobook', on_delete=models.CASCADE,)
     progress = models.FloatField(default=0)
-    recentListen = models.DateTimeField(auto_now_add=True)
+    recentListen = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = ('user', 'audiobook')
