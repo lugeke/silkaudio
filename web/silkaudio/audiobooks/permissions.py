@@ -7,7 +7,7 @@ class HasReadOrStaffPermission(permissions.BasePermission):
         # so we'll always allow GET, HEAD or OPTIONS requests.
         if request.method in permissions.SAFE_METHODS:
             return True
-        # # Write permissions are only allowed to the owner of the snippet.
+        # Write permissions are only allowed to staff.
         return request.user and request.user.is_staff
 
     def has_object_permission(self, request, view, obj):
@@ -23,18 +23,5 @@ class IsOwner(permissions.BasePermission):
     """
 
     def has_object_permission(self, request, view, obj):
-        # Write permissions are only allowed to the owner of the snippet.
-        # if hasattr(obj, 'user'):
-        #     return obj.user == request.user
-        # return obj == request.user
+        # Write permissions are only allowed to the owner.
         return getattr(obj, 'user', obj) == request.user
-
-
-class HistoryPermission(permissions.BasePermission):
-    def has_permission(self, request, view):
-        if request.method not in permissions.SAFE_METHODS:
-            u = request.user
-            u1 = request.data.get('user', None)
-            if u1:
-                return str(u.id) == u1
-        return True

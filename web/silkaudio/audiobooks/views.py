@@ -3,7 +3,7 @@ from audiobooks.serializers import \
     AudiobookSerializer, AuthorSerializer, HistorySerializer, UserSerializer
 from rest_framework import viewsets, permissions
 from audiobooks.permissions import\
-    HasReadOrStaffPermission, IsOwner, HistoryPermission
+    HasReadOrStaffPermission, IsOwner
 
 
 class AudiobookViewSet(viewsets.ModelViewSet):
@@ -34,8 +34,11 @@ class UserViewSet(viewsets.ModelViewSet):
 
 class HistoryViewSet(viewsets.ModelViewSet):
     serializer_class = HistorySerializer
-    permission_classes = (permissions.IsAuthenticated,
-                          IsOwner, HistoryPermission)
+    permission_classes = (permissions.IsAuthenticated, IsOwner)
 
     def get_queryset(self):
         return History.objects.filter(user=self.request.user).all()
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
