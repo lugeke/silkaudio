@@ -32,6 +32,7 @@ class History(models.Model):
 
     class Meta:
         unique_together = ('user', 'audiobook')
+        ordering = ('-recentListen',)
 
     def __str__(self):
         return '{ab.user} {ab.audiobook} {ab.progress}s'.format(ab=self)
