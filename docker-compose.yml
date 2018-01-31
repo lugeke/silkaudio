@@ -8,8 +8,8 @@ services:
       - "80:80"
       
     volumes:
-      - /data/www/build:/data/www/build
-      - /data/www/audio:/data/www/audio
+      - /data/www/silkaudio:/data/www/silkaudio
+      - /data/www/silkaudio/audio:/data/www/silkaudio/audio
     # networks: 
     #   - webnet
     deploy:
