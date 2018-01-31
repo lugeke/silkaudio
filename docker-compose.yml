@@ -30,7 +30,7 @@ services:
     depends_on:
       - "postgres"
     volumes:
-      - /data/www/build:/data/www/build
+      - /data/www/silkaudio:/data/www/silkaudio
     deploy:
       replicas: 1
       restart_policy:
