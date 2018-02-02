@@ -6,10 +6,11 @@ services:
     build: ./nginx
     ports:
       - "80:80"
-      
+      - "443:443"
     volumes:
       - /data/www/silkaudio:/data/www/silkaudio
       - /data/www/silkaudio/audio:/data/www/silkaudio/audio
+      - /etc/letsencrypt:/etc/letsencrypt
     # networks: 
     #   - webnet
     deploy:
