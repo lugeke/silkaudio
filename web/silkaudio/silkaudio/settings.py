@@ -25,7 +25,7 @@ SECRET_KEY = 'n2++9fr8g*0t%g-nd$5p+)k3t@()1$zp5b!3skd83q(6&&-&vv'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['159.89.139.211', 'localhost', '127.0.0.1', 'silkaudio.club']
+ALLOWED_HOSTS = ['www.silkaudio.club', 'localhost', '127.0.0.1', 'silkaudio.club']
 
 # Application definition
 
