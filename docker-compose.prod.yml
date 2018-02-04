@@ -8,5 +8,5 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt
   web:
     environment:
-      DEBUG: 'False'
+      DEBUG: 0
     
