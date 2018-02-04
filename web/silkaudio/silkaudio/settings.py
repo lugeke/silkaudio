@@ -23,9 +23,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG', True)
-if DEBUG:
-    print('debug mode')
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
+print('debug mode ', DEBUG)
 ALLOWED_HOSTS = [
     'www.silkaudio.club',
     'localhost',
