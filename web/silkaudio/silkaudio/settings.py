@@ -26,10 +26,9 @@ SECRET_KEY = os.environ['SECRET_KEY']
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 print('debug mode ', DEBUG)
 ALLOWED_HOSTS = [
-    'www.silkaudio.club',
+    '.silkaudio.club',
     'localhost',
     '127.0.0.1',
-    'silkaudio.club',
 ]
 
 # Application definition
@@ -137,6 +136,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = '/data/www/silkaudio/static'
 AUTH_USER_MODEL = 'accounts.User'
 
+ADMINS = [('jiaheng', 'lugeke@gmail.com')]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
