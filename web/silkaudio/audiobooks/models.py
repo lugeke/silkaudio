@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from accounts.models import User
 
 
 class Audiobook(models.Model):
@@ -20,12 +20,8 @@ class Author(models.Model):
         return '{}: {}'.format(self.id, self.name)
 
 
-class User(AbstractUser):
-    histories = models.ManyToManyField(Audiobook, through='History')
-
-
 class History(models.Model):
-    user = models.ForeignKey('User', on_delete=models.CASCADE,)
+    user = models.ForeignKey(User, on_delete=models.CASCADE,)
     audiobook = models.ForeignKey('Audiobook', on_delete=models.CASCADE,)
     progress = models.FloatField(default=0)
     recentListen = models.DateTimeField(auto_now=True)

@@ -25,7 +25,12 @@ SECRET_KEY = 'n2++9fr8g*0t%g-nd$5p+)k3t@()1$zp5b!3skd83q(6&&-&vv'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['www.silkaudio.club', 'localhost', '127.0.0.1', 'silkaudio.club']
+ALLOWED_HOSTS = [
+    'www.silkaudio.club',
+    'localhost',
+    '127.0.0.1',
+    'silkaudio.club',
+]
 
 # Application definition
 
@@ -36,8 +41,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+
     'rest_framework',
+    'accounts.apps.AccountsConfig',
     'audiobooks.apps.AudiobooksConfig',
+    'debug_toolbar',
+    'knox',
 ]
 
 MIDDLEWARE = [
@@ -48,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'silkaudio.urls'
@@ -124,10 +135,24 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/data/www/silkaudio/static'
-AUTH_USER_MODEL = 'audiobooks.User'
+AUTH_USER_MODEL = 'accounts.User'
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 9
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework.pagination.PageNumberPagination',
+        'PAGE_SIZE': 9,
+}
+
+INTERNAL_IPS = ['127.0.0.1']
+
+
+REST_KNOX = {
+    'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
+    'AUTH_TOKEN_CHARACTER_LENGTH': 64,
+    'USER_SERIALIZER': 'knox.serializers.UserSerializer'
 }

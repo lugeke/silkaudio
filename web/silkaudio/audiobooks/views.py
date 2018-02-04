@@ -1,9 +1,10 @@
-from audiobooks.models import Audiobook, Author, History, User
+from audiobooks.models import Audiobook, Author, History
 from audiobooks.serializers import \
-    AudiobookSerializer, AuthorSerializer, HistorySerializer, UserSerializer
+    AudiobookSerializer, AuthorSerializer, HistorySerializer
 from rest_framework import viewsets, permissions
-from audiobooks.permissions import\
+from silkaudio.permissions import\
     HasReadOrStaffPermission, IsOwner
+from knox.auth import TokenAuthentication
 
 
 class AudiobookViewSet(viewsets.ModelViewSet):
@@ -18,22 +19,9 @@ class AuthorViewSet(viewsets.ModelViewSet):
     permission_classes = (HasReadOrStaffPermission,)
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-    def get_permissions(self):
-        if self.action in ['list', 'create', 'destroy']:
-            permission_classes = [permissions.IsAdminUser]
-        elif self.action in ['retrieve']:
-            permission_classes = [permissions.IsAuthenticated]
-        else:
-            permission_classes = [IsOwner]
-        return [p() for p in permission_classes]
-
-
 class HistoryViewSet(viewsets.ModelViewSet):
     serializer_class = HistorySerializer
+    authentication_classes = (TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated, IsOwner)
 
     def get_queryset(self):
@@ -41,4 +29,3 @@ class HistoryViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
-
