@@ -20,11 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'n2++9fr8g*0t%g-nd$5p+)k3t@()1$zp5b!3skd83q(6&&-&vv'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+DEBUG = os.getenv('DEBUG', True)
+if DEBUG:
+    print('debug mode')
 ALLOWED_HOSTS = [
     'www.silkaudio.club',
     'localhost',
@@ -88,9 +89,9 @@ WSGI_APPLICATION = 'silkaudio.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'data',
-        'USER': 'postgres',
-        'PASSWORD': 'psql',
+        'NAME': os.environ['POSTGRES_DB'],
+        'USER': os.environ['POSTGRES_USER'],
+        'PASSWORD': os.environ['POSTGRES_PASSWORD'],
         'HOST': 'postgres',
         'PORT': '5432',
     }
@@ -149,7 +150,6 @@ REST_FRAMEWORK = {
 }
 
 INTERNAL_IPS = ['127.0.0.1']
-
 
 REST_KNOX = {
     'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',

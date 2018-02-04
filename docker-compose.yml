@@ -6,11 +6,9 @@ services:
     build: ./nginx
     ports:
       - "80:80"
-      - "443:443"
     volumes:
       - /data/www/silkaudio:/data/www/silkaudio
       - /data/www/silkaudio/audio:/data/www/silkaudio/audio
-      - /etc/letsencrypt:/etc/letsencrypt
     # networks: 
     #   - webnet
     deploy:
@@ -32,6 +30,9 @@ services:
       - "postgres"
     volumes:
       - /data/www/silkaudio:/data/www/silkaudio
+    env_file:
+      - ./web/settings.env
+      - ./postgresql/settings.env
     deploy:
       replicas: 1
       restart_policy:
@@ -47,6 +48,8 @@ services:
     deploy:
       placement:
         constraints: [node.role == manager]
+    env_file:
+      - ./postgresql/settings.env
 
 # volumes:
 #   db-data:
