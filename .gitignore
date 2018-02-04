@@ -43,5 +43,5 @@ nosetests.xml
 
 # Virtual environment
 venv
-
+settings.env
 instance/
