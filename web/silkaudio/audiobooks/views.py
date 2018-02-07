@@ -23,17 +23,6 @@ class AuthorViewSet(viewsets.ModelViewSet):
     permission_classes = (HasReadOrStaffPermission,)
 
 
-# class HistoryViewSet(viewsets.ModelViewSet):
-#     serializer_class = HistorySerializer
-#     authentication_classes = (TokenAuthentication, SessionAuthentication)
-#     permission_classes = (permissions.IsAuthenticated, IsOwner)
-
-#     def get_queryset(self):
-#         return History.objects.filter(user=self.request.user)
-
-#     def perform_create(self, serializer):
-#         serializer.save(user=self.request.user)
-
 class HistoryView(AllowPUTAsCreateMixin,
                   mixins.ListModelMixin,
                   generics.GenericAPIView):
@@ -48,25 +37,17 @@ class HistoryView(AllowPUTAsCreateMixin,
         return self.list(request, *args, **kwargs)
 
     def put(self, request, *args, **kwargs):
-        print(request.data['audiobook'])
-        print(args)
-        print(kwargs)
         return self.update(request, *args, **kwargs)
 
     def perform_update(self, serializer):
         serializer.save(user=self.request.user)
 
     def get_object(self):
-        """
-        Returns the object the view is displaying.
-
-        You may want to override this if you need to provide non-standard
-        queryset lookups.  Eg if objects are referenced using multiple
-        keyword arguments in the url conf.
-        """ 
         queryset = self.filter_queryset(self.get_queryset())
 
-        obj = generics.get_object_or_404(queryset, audiobook=self.request.data['audiobook'])
+        obj = generics.get_object_or_404(
+            queryset,
+            audiobook=self.request.data['audiobook'])
 
         # May raise a permission denied
         self.check_object_permissions(self.request, obj)

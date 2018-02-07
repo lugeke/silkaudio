@@ -21,7 +21,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         Create the object.
         :param validated_data: string
         """
-        user = User(email=validated_data['email'], username=validated_data['username'])
+        user = User(email=validated_data['email'],
+                    username=validated_data['username'])
         user.set_password(validated_data['password'])
         user.save()
         return user
@@ -34,7 +35,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         """
 
         if User.objects.filter(email=value).exists():
-            raise serializers.ValidationError('Email already in use, please use a different email address.')
+            raise serializers.ValidationError('''Email already in use,' \
+            please use a different email address.''')
 
         return value
 
