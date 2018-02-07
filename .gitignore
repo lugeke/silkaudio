@@ -45,3 +45,5 @@ nosetests.xml
 venv
 settings.env
 instance/
+
+backup/
