@@ -1,34 +1,18 @@
-from rest_framework import viewsets, permissions
+from rest_framework import permissions
 from knox.models import AuthToken
-from rest_framework.authentication import BasicAuthentication
+from rest_framework.authentication import\
+  BasicAuthentication, SessionAuthentication
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import CreateModelMixin
 from rest_framework.response import Response
 from knox.auth import TokenAuthentication
 
-from accounts.models import User
 from accounts.serializers import UserSerializer, UserRegistrationSerializer
-from silkaudio.permissions import IsOwner
-
-
-# class UserViewSet(viewsets.ModelViewSet):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-#     authentication_classes = (TokenAuthentication,)
-
-#     def get_permissions(self):
-#         if self.action in ['list', 'create', 'destroy']:
-#             permission_classes = [permissions.IsAdminUser]
-#         elif self.action in ['retrieve']:
-#             permission_classes = [permissions.IsAuthenticated]
-#         else:
-#             permission_classes = [IsOwner]
-#         return [p() for p in permission_classes]
 
 
 class UserView(GenericAPIView):
     serializer_class = UserSerializer
-    authentication_classes = (TokenAuthentication,)
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (permissions.IsAuthenticated,)
 
     def get(self, request):
