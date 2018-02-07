@@ -4,25 +4,35 @@ from rest_framework.authentication import BasicAuthentication
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import CreateModelMixin
 from rest_framework.response import Response
-
+from knox.auth import TokenAuthentication
 
 from accounts.models import User
 from accounts.serializers import UserSerializer, UserRegistrationSerializer
 from silkaudio.permissions import IsOwner
 
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+# class UserViewSet(viewsets.ModelViewSet):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#     authentication_classes = (TokenAuthentication,)
 
-    def get_permissions(self):
-        if self.action in ['list', 'create', 'destroy']:
-            permission_classes = [permissions.IsAdminUser]
-        elif self.action in ['retrieve']:
-            permission_classes = [permissions.IsAuthenticated]
-        else:
-            permission_classes = [IsOwner]
-        return [p() for p in permission_classes]
+#     def get_permissions(self):
+#         if self.action in ['list', 'create', 'destroy']:
+#             permission_classes = [permissions.IsAdminUser]
+#         elif self.action in ['retrieve']:
+#             permission_classes = [permissions.IsAuthenticated]
+#         else:
+#             permission_classes = [IsOwner]
+#         return [p() for p in permission_classes]
+
+
+class UserView(GenericAPIView):
+    serializer_class = UserSerializer
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get(self, request):
+        return Response(self.get_serializer(request.user).data)
 
 
 class UserRegisterView(CreateModelMixin, GenericAPIView):
@@ -42,7 +52,8 @@ class UserLoginView(GenericAPIView):
     def post(self, request):
         """User login with username and password."""
         token = AuthToken.objects.create(request.user)
+        data = self.get_serializer(request.user).data
         return Response({
-            'user': self.get_serializer(request.user).data,
-            'token': token
+            **data,
+            'token': token,
         })

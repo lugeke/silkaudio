@@ -10,4 +10,7 @@ urlpatterns = [
     url(_(r'^login/$'),
         accounts.views.UserLoginView.as_view(),
         name='login'),
+    url(_(r'^user/$'),
+        accounts.views.UserView.as_view(),
+        name='user'),
 ]
