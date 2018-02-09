@@ -35,8 +35,8 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         """
 
         if User.objects.filter(email=value).exists():
-            raise serializers.ValidationError('''Email already in use, \
-            please use a different email address.''')
+            raise serializers.ValidationError(
+                'Email already in use, please use a different email address.')
 
         return value
 
