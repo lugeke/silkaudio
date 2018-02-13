@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 """
 
 import os
-
+from datetime import timedelta
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -157,5 +157,6 @@ INTERNAL_IPS = ['127.0.0.1']
 REST_KNOX = {
     'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
     'AUTH_TOKEN_CHARACTER_LENGTH': 64,
-    'USER_SERIALIZER': 'knox.serializers.UserSerializer'
+    'USER_SERIALIZER': 'knox.serializers.UserSerializer',
+    'TOKEN_TTL': timedelta(days=30),
 }
